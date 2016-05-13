@@ -14,6 +14,7 @@
 		CE3695D01C5AA71C00EA307C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE3695CE1C5AA71C00EA307C /* LaunchScreen.storyboard */; };
 		CE3695DB1C5AA71D00EA307C /* CalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3695DA1C5AA71D00EA307C /* CalculatorTests.swift */; };
 		CE3695E61C5AA71D00EA307C /* CalculatorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3695E51C5AA71D00EA307C /* CalculatorUITests.swift */; };
+		CE8437A11C614BF600B9B550 /* CalculatorBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8437A01C614BF600B9B550 /* CalculatorBrain.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		CE3695E11C5AA71D00EA307C /* CalculatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CalculatorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE3695E51C5AA71D00EA307C /* CalculatorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorUITests.swift; sourceTree = "<group>"; };
 		CE3695E71C5AA71D00EA307C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CE8437A01C614BF600B9B550 /* CalculatorBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalculatorBrain.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 			children = (
 				CE3695C51C5AA71C00EA307C /* AppDelegate.swift */,
 				CE3695C71C5AA71C00EA307C /* ViewController.swift */,
+				CE8437A01C614BF600B9B550 /* CalculatorBrain.swift */,
 				CE3695C91C5AA71C00EA307C /* Main.storyboard */,
 				CE3695CC1C5AA71C00EA307C /* Assets.xcassets */,
 				CE3695CE1C5AA71C00EA307C /* LaunchScreen.storyboard */,
@@ -193,6 +196,7 @@
 				TargetAttributes = {
 					CE3695C11C5AA71C00EA307C = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = 657WB3VLKU;
 					};
 					CE3695D51C5AA71D00EA307C = {
 						CreatedOnToolsVersion = 7.2;
@@ -256,6 +260,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE8437A11C614BF600B9B550 /* CalculatorBrain.swift in Sources */,
 				CE3695C81C5AA71C00EA307C /* ViewController.swift in Sources */,
 				CE3695C61C5AA71C00EA307C /* AppDelegate.swift in Sources */,
 			);
@@ -399,10 +404,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Calculator/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = bowdoin.edu.2505.safian.Calculator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -410,10 +418,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Calculator/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = bowdoin.edu.2505.safian.Calculator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -484,6 +495,7 @@
 				CE3695EC1C5AA71D00EA307C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CE3695ED1C5AA71D00EA307C /* Build configuration list for PBXNativeTarget "CalculatorTests" */ = {
 			isa = XCConfigurationList;
@@ -492,6 +504,7 @@
 				CE3695EF1C5AA71D00EA307C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CE3695F01C5AA71D00EA307C /* Build configuration list for PBXNativeTarget "CalculatorUITests" */ = {
 			isa = XCConfigurationList;
@@ -500,6 +513,7 @@
 				CE3695F21C5AA71D00EA307C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
