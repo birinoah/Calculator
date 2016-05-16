@@ -18,6 +18,7 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
     
     var brain = CalculatorBrain()
     
+    // Standardized decimal point char to be used
     static let decimal_pt = "."
     
     @IBAction func clearPressed(sender: UIButton) {
@@ -29,17 +30,20 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
     
     @IBAction func constantPressed(sender: UIButton) {
         let title = sender.currentTitle!
-        let value = { () -> Double in
+        
+        // Closure deals with symbol and returns value to be pushed to brain
+        // If constant unknown, returns nil
+        let value = { () -> Double? in
             switch title {
             case "π":
                 return M_PI
             default:
                 print("\(title) is not a known constant")
-                return 0
+                return nil
             }
         }()
         
-        if value != 0 {
+        if let value = value {
             enter()
             displayValue = value
             enter()
@@ -50,7 +54,7 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
         let digit = sender.currentTitle!
         
         if userIsTyping{
-            // If it is not the case that the digit pressed is the decimal and one is already in our string
+            // If the user isn't trying to add a second decimal point to the number they've been typing
             if !((digit == CalculatorViewController.decimal_pt) && (self.display.text!.rangeOfString(CalculatorViewController.decimal_pt) != nil)) {
                 
                 self.display.text = self.display.text! + digit

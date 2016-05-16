@@ -14,6 +14,7 @@ class CalculatorBrain
     
     private var knownOps = [String: Op]()
     
+    // Delegate that wants to be updated about changes to this brain's history
     var delegate: CalculatorBrainDelegate?
     
     init() {
@@ -100,12 +101,14 @@ class CalculatorBrain
         return nil
     }
     
+    // Helper function updates delegate if there is one
     private func tryUpdateDelegate() {
         if let delegate: CalculatorBrainDelegate = delegate {
             delegate.historyUpdated()
         }
     }
     
+    // returns history of stack
     func getHistory() -> String {
         return opStack.description
     }
@@ -115,6 +118,7 @@ class CalculatorBrain
     }
 }
 
+// Protocol that should be implemented by those wishing to by notified when brain's history is updated
 protocol CalculatorBrainDelegate{
     func historyUpdated()
 }
