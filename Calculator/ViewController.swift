@@ -68,7 +68,7 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
         let digit = sender.currentTitle!
         
         if userIsTyping{
-            // if the user is typing and presses the decimal point and there is not already one in the display text
+            // if the user is typing not trying to add a second decimal point to the number being typed
             if !((digit == CalculatorViewController.decimal_pt) && (self.display.text!.rangeOfString(CalculatorViewController.decimal_pt) != nil)) {
                 
                 self.display.text = self.display.text! + digit
