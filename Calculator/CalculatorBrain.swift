@@ -83,7 +83,13 @@ class CalculatorBrain
             case .BinaryOperation(let symbol, _, let priority):
                 let innerEvaluation = getDescription(remainingOps)
                 
-                var first = innerEvaluation.result
+                var first = ""
+                
+                if remainingOps.isEmpty {
+                    first = "?"
+                } else {
+                    first = innerEvaluation.result
+                }
                 
                 let innerEvaluation2 = getDescription(innerEvaluation.remainingOps)
                 
@@ -149,7 +155,6 @@ class CalculatorBrain
     
     func evaluate() -> Double? {
         let (result, _) = evaluate(opStack)
-        print("\(opStack)")
         return result
     }
     
@@ -208,7 +213,6 @@ class CalculatorBrain
         if let operation = knownOps[symbol]{
             opStack.append(operation)
             tryUpdateDelegate()
-            print("\(opStack)")
             return evaluate()
         }
         return nil

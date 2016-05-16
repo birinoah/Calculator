@@ -74,7 +74,11 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
             
         }else
         {
-            displayValue = Double(digit)
+            if digit == CalculatorViewController.decimal_pt {
+                display.text = "0."
+            } else {
+                displayValue = Double(digit)
+            }
             userIsTyping = true
         }
         
@@ -104,8 +108,12 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
     
     var displayValue: Double? {
         get{
-            if let num: Double = NSNumberFormatter().numberFromString(display.text!)!.doubleValue {
-                return num
+            if let displayText = display.text {
+                if let num: Double = NSNumberFormatter().numberFromString(displayText)?.doubleValue {
+                    return num
+                } else {
+                    return nil
+                }
             }
             else {
                 return nil
@@ -113,7 +121,7 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
         }
         set{
             if let value: Double = newValue {
-                display.text = "\(value)"
+                display.text = String(format: "%.9g", value)
             } else {
                 display.text = " "
                 userIsTyping = false
