@@ -18,6 +18,7 @@ class CalculatorBrain
     
     static let piSymbol = "π"
     
+    // Delegate called when history updated
     var delegate: CalculatorBrainDelegate?
     
     var description: String {
@@ -26,17 +27,29 @@ class CalculatorBrain
             
             var description = ""
             
+            // Runs once for every "group" situated between commas in the brain description
             while !remainingOps.isEmpty {
                 let (resultString, leftoverOps, _) = getDescription(remainingOps)
                 
                 remainingOps = leftoverOps
                 description = resultString + ", " + description
             }
+            
+            // Cuts off extra space and comma
             let range = description.startIndex..<description.endIndex.advancedBy(-2)
+            
             return description.substringWithRange(range)
         }
     }
     
+    // Priorities:
+    // Constants/Operands - 5
+    // Exponents - 4
+    // Muliplication/Division - 3
+    // Addition/Subtraction - 2
+    
+    // Above priorities assigned appropriately below.
+    // Used to determine where parenthesis are necessary in description
     init() {
         func learnOp(op: Op){
             knownOps[op.description] = op
@@ -48,17 +61,15 @@ class CalculatorBrain
         learnOp(Op.UnaryOperation("√", sqrt))
         learnOp(Op.UnaryOperation("sin", sin))
         learnOp(Op.UnaryOperation("cos", cos))
+        
+        // Constants are just more known Ops
         learnOp(Op.Constant(CalculatorBrain.piSymbol, M_PI))
         learnOp(Op.Constant("e", M_E))
     }
     
     
-    // Priorities:
-    // Constants/Operands - 5
-    // Exponents - 4
-    // Muliplication/Division - 3
-    // Addition/Subtraction - 2
-    
+
+    // Given to things that never need extra parenthesis - Constants, numbers, unary operations...
     static let highPriority = 5
     
     private func getDescription(ops: [Op]) -> (result: String, remainingOps: [Op], priority: Int){
@@ -85,12 +96,14 @@ class CalculatorBrain
                 
                 var first = ""
                 
+                // If there is a missign operand, compensate. Otherwise take result of recursion
                 if remainingOps.isEmpty {
                     first = "?"
                 } else {
                     first = innerEvaluation.result
                 }
                 
+                // Below repeats steps from above with Ops left over from first recursion
                 let innerEvaluation2 = getDescription(innerEvaluation.remainingOps)
                 
                 var second = ""
@@ -101,6 +114,7 @@ class CalculatorBrain
                     second = innerEvaluation2.result
                 }
                 
+                // Adds parenthesis to project lower-priority operations when necessary
                 if innerEvaluation.priority < priority {
                     first = "(" + first + ")"
                 }
@@ -125,11 +139,6 @@ class CalculatorBrain
                 
             case .Variable(let symbol):
                 return (variableValues[symbol], remainingOps)
-//                if let value: Double = variableValues[symbol] {
-//                    return (value, remainingOps)
-//                } else {
-//                    return nil
-//                }
             
             case .Constant(_, let value):
                 return (value, remainingOps)
@@ -222,6 +231,7 @@ class CalculatorBrain
         variableValues[symbol] = value
     }
     
+    // Helper method updates delegate if one exists
     private func tryUpdateDelegate() {
         if let delegate: CalculatorBrainDelegate = delegate {
             delegate.historyUpdated()
@@ -238,6 +248,7 @@ class CalculatorBrain
     }
 }
 
+// Protocol for delegate that wants to be notified when brain's history is updated
 protocol CalculatorBrainDelegate{
     func historyUpdated()
 }

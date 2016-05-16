@@ -18,6 +18,7 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
     
     var brain = CalculatorBrain()
     
+    // Used to standardize decimal point character
     static let decimal_pt = "."
     
     @IBAction func varPressed(sender: UIButton) {
@@ -35,6 +36,7 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
     @IBAction func setVarPressed(sender: UIButton) {
         let title = sender.currentTitle!
         
+        // Get symbol, ignoring leading arrow
         let symbol = title.substringWithRange(title.startIndex.advancedBy(1)..<title.endIndex)
         
         if let value = displayValue {
@@ -66,7 +68,7 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
         let digit = sender.currentTitle!
         
         if userIsTyping{
-            // If it is not the case that the digit pressed is the decimal and one is already in our string
+            // if the user is typing and presses the decimal point and there is not already one in the display text
             if !((digit == CalculatorViewController.decimal_pt) && (self.display.text!.rangeOfString(CalculatorViewController.decimal_pt) != nil)) {
                 
                 self.display.text = self.display.text! + digit
@@ -74,9 +76,12 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
             
         }else
         {
+            // If the user starts typing with the decimal point
             if digit == CalculatorViewController.decimal_pt {
                 display.text = "0."
-            } else {
+            }
+            // Otherwise
+            else {
                 displayValue = Double(digit)
             }
             userIsTyping = true
@@ -101,24 +106,23 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
         }
     }
     
+    // Delegate method called by Calculator brain when history has changed
     func historyUpdated() {
         historyLabel.text = brain.description + " ="
     }
     
     
     var displayValue: Double? {
+        // Returns display text converted to double if possible - otherwise nil
         get{
             if let displayText = display.text {
-                if let num: Double = NSNumberFormatter().numberFromString(displayText)?.doubleValue {
-                    return num
-                } else {
-                    return nil
-                }
-            }
-            else {
+                return NSNumberFormatter().numberFromString(displayText)?.doubleValue
+            } else {
                 return nil
             }
         }
+        // Sets display text to string representation of given value up to 9 decimal places if possible
+        // Otherwise just sets text to a space character
         set{
             if let value: Double = newValue {
                 display.text = String(format: "%.9g", value)
