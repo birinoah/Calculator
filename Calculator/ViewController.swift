@@ -20,6 +20,30 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
     
     static let decimal_pt = "."
     
+    @IBAction func varPressed(sender: UIButton) {
+        let symbol = sender.currentTitle!
+        
+        if userIsTyping {
+            enter()
+        }
+        
+        displayValue = brain.pushOperand(symbol)
+        
+        userIsTyping = false
+    }
+    
+    @IBAction func setVarPressed(sender: UIButton) {
+        let title = sender.currentTitle!
+        
+        let symbol = title.substringWithRange(title.startIndex.advancedBy(1)..<title.endIndex)
+        
+        if let value = displayValue {
+            brain.setVariable(symbol, value: value)
+        }
+        displayValue = brain.evaluate()
+        userIsTyping = false
+    }
+    
     @IBAction func clearPressed(sender: UIButton) {
         brain.clear()
         userIsTyping = false
@@ -29,21 +53,13 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
     
     @IBAction func constantPressed(sender: UIButton) {
         let title = sender.currentTitle!
-        let value = { () -> Double in
-            switch title {
-            case "π":
-                return M_PI
-            default:
-                print("\(title) is not a known constant")
-                return 0
-            }
-        }()
         
-        if value != 0 {
-            enter()
-            displayValue = value
+        if userIsTyping {
             enter()
         }
+        displayValue = brain.pushOperand(title)
+        
+        userIsTyping = false
     }
     
     @IBAction func digitPressed(sender: UIButton) {
@@ -58,7 +74,7 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
             
         }else
         {
-            display.text = digit
+            displayValue = Double(digit)
             userIsTyping = true
         }
         
@@ -66,10 +82,8 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
     @IBAction func enter() {
         userIsTyping = false
         
-        if let result = brain.pushOperand(displayValue) {
-            displayValue = result
-        } else {
-            displayValue = 0
+        if let value = displayValue {
+            displayValue = brain.pushOperand(value)
         }
     }
     
@@ -79,25 +93,31 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
         }
         
         if let operation = sender.currentTitle {
-            if let result = brain.performOperation(operation) {
-                displayValue = result
-            } else {
-                displayValue = 0
-            }
+            displayValue = brain.performOperation(operation)
         }
     }
     
     func historyUpdated() {
-        historyLabel.text = brain.getHistory()
+        historyLabel.text = brain.description + " ="
     }
     
     
-    var displayValue: Double {
+    var displayValue: Double? {
         get{
-            return NSNumberFormatter().numberFromString(display.text!)!.doubleValue
+            if let num: Double = NSNumberFormatter().numberFromString(display.text!)!.doubleValue {
+                return num
+            }
+            else {
+                return nil
+            }
         }
         set{
-            display.text = "\(newValue)"
+            if let value: Double = newValue {
+                display.text = "\(value)"
+            } else {
+                display.text = " "
+                userIsTyping = false
+            }
         }
     }
     
