@@ -133,9 +133,16 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
         }
     }
     
-    
-    
-    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "graphSegue" {
+            if let navcon = segue.destinationViewController as? UINavigationController {
+                if let graphVC = navcon.visibleViewController as? GraphViewController {
+                    graphVC.function = brain.getFunc()
+                    graphVC.navigationItem.title = brain.topDescription
+                }
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
