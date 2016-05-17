@@ -42,6 +42,7 @@ class CalculatorBrain
         }
     }
     
+    // The description for just the top function on the stack
     var topDescription: String {
         get {
             let (resultString, _, _) = getDescription(opStack)
@@ -136,6 +137,8 @@ class CalculatorBrain
         return (" ", ops, CalculatorBrain.highPriority)
     }
     
+    // Returns the top function on the stack as a one-variabel functions R->R where all the variables
+    // are the same
     private func getFunc(ops: [Op]) -> (result: ((Double)->Double)?, remainingOps: [Op]){
         if !ops.isEmpty {
             var remainingOps = ops
@@ -143,17 +146,18 @@ class CalculatorBrain
             
             switch op {
             case .Operand(let operand):
-                return ({ _ in return operand }, remainingOps)
+                return ({ _ in return operand }, remainingOps) // return constant function at operand
                 
             case .Variable(_):
-                return ({ (x: Double) in return x }, remainingOps)
+                return ({ (x: Double) in return x }, remainingOps) // return f(x) = x, identity function
                 
             case .Constant(_, let value):
-                return ({ _ in return value}, remainingOps)
+                return ({ _ in return value}, remainingOps) // reutrn constant function at constant value
                 
             case .UnaryOperation(_, let operation):
                 let operandEvaluation = getFunc(remainingOps)
                 if let innerOp = operandEvaluation.result {
+                    // returns a function defined by the unary operation on the inner function of the given parameter
                     return ({ (x: Double) in operation(innerOp(x)) }, operandEvaluation.remainingOps)
                 }
                 
@@ -162,6 +166,8 @@ class CalculatorBrain
                 if let  innerOp = operandEvaluation.result{
                     let operandEvaluation2 = getFunc(operandEvaluation.remainingOps)
                     if let innerOp2 = operandEvaluation2.result {
+                        // Returns a function defined by the binary operation of the two inner operations,
+                        // both performed onthe given parameter
                         return ({ (x: Double) in operation(innerOp(x), innerOp2(x)) }, operandEvaluation2.remainingOps)
                     }
                 }
@@ -170,6 +176,8 @@ class CalculatorBrain
         return (nil, ops)
     }
     
+    // Returns the top function on the stack as a one-variabel functions R->R where all the variables
+    // are the same
     func getFunc() -> ((Double)->Double)? {
         let (result, _) = getFunc(opStack)
         return result

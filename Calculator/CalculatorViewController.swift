@@ -134,9 +134,11 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        // If we are seguing to the graphView as determined in the storyboard
         if segue.identifier == "graphSegue" {
             if let navcon = segue.destinationViewController as? UINavigationController {
                 if let graphVC = navcon.visibleViewController as? GraphViewController {
+                    // set function and description of the graph view
                     graphVC.function = brain.getFunc()
                     graphVC.navigationItem.title = brain.topDescription
                 }
