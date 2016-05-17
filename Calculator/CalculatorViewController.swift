@@ -50,7 +50,7 @@ class CalculatorViewController: UIViewController, CalculatorBrainDelegate {
         brain.clear()
         userIsTyping = false
         displayValue = 0
-        historyLabel.text = ""
+        historyLabel.text = " "
     }
     
     @IBAction func constantPressed(sender: UIButton) {

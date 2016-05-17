@@ -107,9 +107,9 @@
 			children = (
 				CE3695C51C5AA71C00EA307C /* AppDelegate.swift */,
 				CE3695C71C5AA71C00EA307C /* CalculatorViewController.swift */,
-				0EC33F151CEA849200946F1D /* AxesDrawer.swift */,
 				CE8437A01C614BF600B9B550 /* CalculatorBrain.swift */,
 				CE3695C91C5AA71C00EA307C /* Main.storyboard */,
+				0EC33F151CEA849200946F1D /* AxesDrawer.swift */,
 				0EC33F171CEA99F800946F1D /* GraphViewController.swift */,
 				0EC33F191CEA9A1A00946F1D /* GraphView.swift */,
 				CE3695CC1C5AA71C00EA307C /* Assets.xcassets */,

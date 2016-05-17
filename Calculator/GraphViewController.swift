@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GraphViewController: UIViewController {
+class GraphViewController: UIViewController, GraphViewDataSource {
     
     // REMEMBER TO DEAL WITH HISTORY LABEL DISAPPEARING
     
@@ -20,9 +20,7 @@ class GraphViewController: UIViewController {
     }
     
     func updateGraph() {
-        if let function = function {
-            graphView.drawFunc(function)
-        }   
+        //graphView.setNeedsDisplay()
     }
     
     
@@ -34,18 +32,28 @@ class GraphViewController: UIViewController {
             let doubleTapRecognizer = UITapGestureRecognizer(target: graphView, action: "handleDoubleTap:")
             doubleTapRecognizer.numberOfTapsRequired = 2
             graphView.addGestureRecognizer(doubleTapRecognizer)
+            
+            graphView.dataSource = self
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        graphView.setNeedsDisplay()
         // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func getYfor(x: Double) -> Double {
+        if let f = function {
+            return f(x)
+        } else {
+            return Double.NaN
+        }
     }
     
 
