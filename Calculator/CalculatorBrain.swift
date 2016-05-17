@@ -42,6 +42,14 @@ class CalculatorBrain
         }
     }
     
+    var topDescription: String {
+        get {
+            let (resultString, _, _) = getDescription(opStack)
+            
+            return resultString
+        }
+    }
+    
     // Priorities:
     // Constants/Operands - 5
     // Exponents - 4
@@ -70,7 +78,7 @@ class CalculatorBrain
     
 
     // Given to things that never need extra parenthesis - Constants, numbers, unary operations...
-    static let highPriority = 5
+    private static let highPriority = 5
     
     private func getDescription(ops: [Op]) -> (result: String, remainingOps: [Op], priority: Int){
         if !ops.isEmpty {
@@ -126,6 +134,45 @@ class CalculatorBrain
             }
         }
         return (" ", ops, CalculatorBrain.highPriority)
+    }
+    
+    private func getFunc(ops: [Op]) -> (result: ((Double)->Double)?, remainingOps: [Op]){
+        if !ops.isEmpty {
+            var remainingOps = ops
+            let op = remainingOps.removeLast()
+            
+            switch op {
+            case .Operand(let operand):
+                return ({ _ in return operand }, remainingOps)
+                
+            case .Variable(_):
+                return ({ (x: Double) in return x }, remainingOps)
+                
+            case .Constant(_, let value):
+                return ({ _ in return value}, remainingOps)
+                
+            case .UnaryOperation(_, let operation):
+                let operandEvaluation = getFunc(remainingOps)
+                if let innerOp = operandEvaluation.result {
+                    return ({ (x: Double) in operation(innerOp(x)) }, operandEvaluation.remainingOps)
+                }
+                
+            case .BinaryOperation(_, let operation, _):
+                let operandEvaluation = getFunc(remainingOps)
+                if let  innerOp = operandEvaluation.result{
+                    let operandEvaluation2 = getFunc(operandEvaluation.remainingOps)
+                    if let innerOp2 = operandEvaluation2.result {
+                        return ({ (x: Double) in operation(innerOp(x), innerOp2(x)) }, operandEvaluation2.remainingOps)
+                    }
+                }
+            }
+        }
+        return (nil, ops)
+    }
+    
+    func getFunc() -> ((Double)->Double)? {
+        let (result, _) = getFunc(opStack)
+        return result
     }
     
     private func evaluate(ops: [Op]) -> (result: Double?, remainingOps: [Op]){
